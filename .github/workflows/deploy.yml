@@ -32,5 +32,5 @@ jobs:
           project: "logging666"
           entrypoint: "index.ts"
           root: ""
-          include: index.ts
+          
           
