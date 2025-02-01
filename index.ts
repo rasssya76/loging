@@ -37,5 +37,10 @@ router.get("/status", (ctx) => {
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-console.log("Server running on http://localhost:8000")
-await app.listen({ port: 8000 })
+// Hanya jalankan server saat dibutuhkan (untuk GitHub Actions atau Deno.dev)
+if (import.meta.main) {
+    console.log("Server running on http://localhost:8000")
+    await app.listen({ port: 8000 })
+}
+
+export default app.handle
