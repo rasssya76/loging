@@ -1,10 +1,7 @@
-import { Application, Router } from "https://deno.land/x/oak/mod.ts"
-import { format } from "https://deno.land/std/datetime/mod.ts"
+import { Application, Router } from "oak/mod.ts"
 
-const app = new Application()
-const router = new Router()
-
-function formatSize(bytes: number) {
+// Format ukuran data
+function formatSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`
     const k = 1024
     const sizes = ['KB', 'MB', 'GB', 'TB']
@@ -12,23 +9,28 @@ function formatSize(bytes: number) {
     return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i - 1]}`
 }
 
+const app = new Application()
+const router = new Router()
+
+// Route: Home
 router.get("/", (ctx) => {
     ctx.response.body = "Hello World!"
 })
 
+// Route: Status
 router.get("/status", (ctx) => {
-    const used = performance.memory
-    const status: Record<string, string> = {
-        totalJSHeapSize: formatSize(used.totalJSHeapSize),
-        usedJSHeapSize: formatSize(used.usedJSHeapSize),
-        jsHeapSizeLimit: formatSize(used.jsHeapSizeLimit),
+    const memoryUsage = performance.memory
+    const status = {
+        totalJSHeapSize: formatSize(memoryUsage.totalJSHeapSize),
+        usedJSHeapSize: formatSize(memoryUsage.usedJSHeapSize),
+        jsHeapSizeLimit: formatSize(memoryUsage.jsHeapSizeLimit),
+        uptime: `${(Deno.uptime() / 60).toFixed(2)} minutes`
     }
 
     ctx.response.body = {
         creator: "@rasssya766",
         message: "Online!",
-        uptime: format(new Date(), "HH:mm:ss"),
-        status,
+        status
     }
 })
 
