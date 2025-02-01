@@ -16,7 +16,7 @@ router.get("/", (ctx) => {
     ctx.response.body = "Hello World!"
 })
 
-router.get("/status", async (ctx) => {
+router.get("/status", (ctx) => {
     const used = performance.memory
     const status: Record<string, string> = {
         totalJSHeapSize: formatSize(used.totalJSHeapSize),
@@ -35,5 +35,5 @@ router.get("/status", async (ctx) => {
 app.use(router.routes())
 app.use(router.allowedMethods())
 
-// Ekspor handler untuk Vercel
-export default app.handle
+console.log("Server running on http://localhost:8000")
+await app.listen({ port: 8000 })
